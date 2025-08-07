@@ -1,30 +1,23 @@
 package com.piwnicastudio.uno.card;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
+import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private int number;
     private boolean isWildCard;
-
-    @Enumerated(EnumType.STRING)
     private COLOR color;
-
     public enum COLOR {
         RED, BLUE, GREEN, YELLOW;
 
@@ -35,5 +28,15 @@ public class Card {
         public static COLOR random() {
             return VALUES.get(RANDOM.nextInt(SIZE));
         }
+    }
+
+    public static Card createRandom() {
+        Random random = new Random();
+        return Card.builder()
+                .id(UUID.randomUUID().toString())
+                .number(random.nextInt(1,10))
+                .isWildCard(random.nextBoolean())
+                .color(COLOR.random())
+                .build();
     }
 }

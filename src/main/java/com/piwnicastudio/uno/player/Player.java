@@ -1,21 +1,17 @@
 package com.piwnicastudio.uno.player;
 
 import com.piwnicastudio.uno.card.Card;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @RequiredArgsConstructor
 @Entity
 public class Player {
@@ -25,7 +21,13 @@ public class Player {
 
     @NonNull
     private String name;
-    private List<Card> cards;
+    @Transient
+    private List<Card> cards = new ArrayList<>();;
+
+    public Player(){
+        cards = new ArrayList<>();
+    }
+
     public void addCard(Card card) {
         this.cards.add(card);
     }

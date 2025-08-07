@@ -16,8 +16,8 @@ public class CardDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String number;
+    private String id;
+    private int number;
     private Card.COLOR color;
     private boolean isWildCard;
 
