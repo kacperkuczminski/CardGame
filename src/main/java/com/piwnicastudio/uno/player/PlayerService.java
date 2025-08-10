@@ -17,4 +17,12 @@ public class PlayerService {
     public void addNewPlayer(Player player) {
         this.playerRepository.save(player);
     }
+
+    public void removePlayer(Player player) {
+        this.playerRepository.delete(player);
+    }
+
+    public Optional<Player> getPlayerByName(String playerName) {
+        return this.playerRepository.findPlayerByName(playerName);
+    }
 }
