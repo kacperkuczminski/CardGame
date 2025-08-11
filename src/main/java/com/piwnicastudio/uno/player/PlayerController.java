@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
+// Without 'RestController' this annotation Swagger don't show all endpoints
+@RestController
 @Controller
 @RequestMapping("/api/players")
 @AllArgsConstructor
@@ -42,6 +44,9 @@ public class PlayerController {
 
     @PostMapping("/login")
     public ResponseEntity<String> loginPlayer(HttpServletRequest request, @RequestParam String playerName) throws IOException {
+        if(request.getAttribute("player") != null) {
+            return ResponseEntity.ok("Player logged in");
+        }
         Optional<Player> player = playerService.getPlayerByName(playerName);
         if(player.isPresent())
         {
@@ -52,22 +57,21 @@ public class PlayerController {
         return ResponseEntity.ok("Player not logged in");
     }
 
-    @GetMapping("/player")
-    public Player getPlayerFromCookie(@CookieValue("JSESSIONID") String sessionId,
-                                      HttpServletRequest request) {
+    @GetMapping("/getPlayer")
+    public Optional<Player> getPlayerFromCookie(@CookieValue("JSESSIONID") String sessionId,
+                                                HttpServletRequest request) {
         // ID sesji z cookie
         System.out.println("Session ID: " + sessionId);
-
         HttpSession session = request.getSession(false); // false = nie twórz nowej
         if (session == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesja nie istnieje");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Session not exists");
         }
 
-        Player player = (Player) session.getAttribute("player");
-        if (player == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Brak danych gracza");
+        Optional<Player> player = ((Optional<Player>)session.getAttribute("player"));
+        if (player.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Player data not found!");
         }
-        System.out.println("Player: " + player.toString());
+        System.out.println("Player: " + player.get().getName());
         return player;
     }
 

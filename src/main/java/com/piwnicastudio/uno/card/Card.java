@@ -1,11 +1,11 @@
 package com.piwnicastudio.uno.card;
 
+import com.piwnicastudio.uno.common.request.RequestObjectParser;
 import jakarta.persistence.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -38,5 +38,11 @@ public class Card {
                 .isWildCard(random.nextBoolean())
                 .color(COLOR.random())
                 .build();
+    }
+
+    public static List<Card> getCardsListFromRequest(HttpServletRequest request) {
+        RequestObjectParser<Card> cardList = new RequestObjectParser<Card>("cardList", Card.class);
+        return Collections.singletonList(cardList.extract(request));
+
     }
 }

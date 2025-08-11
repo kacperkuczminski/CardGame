@@ -1,7 +1,9 @@
 package com.piwnicastudio.uno.player;
 
 import com.piwnicastudio.uno.card.Card;
+import com.piwnicastudio.uno.common.request.RequestObjectParser;
 import jakarta.persistence.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -14,7 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class Player {
+public class Player{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +34,11 @@ public class Player {
         this.cards.add(card);
     }
 
+    public Player getPlayerFromRequest(HttpServletRequest request) {
+        RequestObjectParser<Player> player = new RequestObjectParser<>("player", Player.class);
+        return player.extract(request);
+    }
+    
     @Override
     public final boolean equals(Object o) {
         if (this == o) {return true;}

@@ -1,5 +1,7 @@
 package com.piwnicastudio.uno.player;
 
+import com.piwnicastudio.uno.common.request.Request;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +27,6 @@ public class PlayerService {
     public Optional<Player> getPlayerByName(String playerName) {
         return this.playerRepository.findPlayerByName(playerName);
     }
+
+
 }
